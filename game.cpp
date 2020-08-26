@@ -6,6 +6,9 @@ bool gameOver;
 const int width = 20;
 const int height = 20;
 int x, y, fruitX, fruitY, score;
+int tailX[100],tailY[100];
+int nTail;
+
 enum eDirection {STOP=0,LEFT,RIGHT,UP,DOWN };
 eDirection dir;
 
@@ -21,9 +24,8 @@ void Setup() {
 
 void Draw() {
 	system("cls");
-	for (int i = 0; i < width+1; i++) {
+	for (int i = 0; i < width+1; i++) 
 		cout << "#";
-	}
 	cout << endl; 
 
 	for (int i = 0; i < height; i++) {
@@ -34,10 +36,20 @@ void Draw() {
 				cout << "0";
 			else if (i == fruitY && j == fruitX)
 				cout << "F";
-			else
-			cout << " ";
+			else {
+				bool print = false;
+				for (int k = 0; k < nTail; k++) {
+					if (tailX[k] == j && tailY[k] == i) {
+						print = true;
+						cout << "o";
+					}
+				}
+				if (!print)
+				cout << " ";
+			}
 		}
-		cout << endl;
+			cout << endl;
+		
 	}
 	for (int i = 0; i < width+1; i++) {
 		cout << "#";
@@ -70,6 +82,20 @@ void Input() {
 }
 
 void Logic() {
+	int prevX = tailX[0];
+	int prevY = tailY[0];
+	int prev2X, prev2Y;
+	tailX[0] = x;
+	tailY[0] = y;
+	for (int i = 1; i < nTail; i++) {
+		prev2X = tailX[i];
+		prev2Y = tailY[i];
+		tailX[i] = prevX;
+		tailY[i] = prevY;
+		prevX = prev2X;
+		prevY = prev2Y;
+
+	}
 	switch (dir)
 	{
 	case LEFT:
